@@ -1,0 +1,23 @@
+name: build-mod
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q TheWatcherStalker_Mod_Project.zip -d proj
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 9.4.0
+      - run: gradle build
+        working-directory: proj
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mod-jar
+          path: proj/build/libs/*.jar
